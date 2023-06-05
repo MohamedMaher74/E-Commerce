@@ -8,6 +8,9 @@ const Product = require('../models/productModel');
 const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel');
 
+// @desc    create cash order
+// @route   POST /api/v1/orders/cartId
+// @access  Protected/User
 exports.createCashOrder = asyncHandler(async (req, res, next) => {
   // app settings
   const taxPrice = 0;
@@ -58,10 +61,19 @@ exports.filterOrderForLoggedUser = asyncHandler(async (req, res, next) => {
   next();
 });
 
+// @desc    Get all orders
+// @route   POST /api/v1/orders
+// @access  Protected/User-Admin-Manager
 exports.findAllOrders = factory.getAll(Order);
 
+// @desc    Get all orders
+// @route   POST /api/v1/orders
+// @access  Protected/User-Admin-Manager
 exports.findSpecificOrder = factory.getOne(Order);
 
+// @desc    Update order paid status to paid
+// @route   PUT /api/v1/orders/:id/pay
+// @access  Protected/Admin-Manager
 exports.updateOrderToPaid = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
   if (!order) {
@@ -82,6 +94,9 @@ exports.updateOrderToPaid = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: updatedOrder });
 });
 
+// @desc    Update order delivered status
+// @route   PUT /api/v1/orders/:id/deliver
+// @access  Protected/Admin-Manager
 exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
   if (!order) {
@@ -102,6 +117,9 @@ exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: updatedOrder });
 });
 
+// @desc    Get checkout session from stripe and send it as response
+// @route   GET /api/v1/orders/checkout-session/cartId
+// @access  Protected/User
 exports.checkoutSession = asyncHandler(async (req, res, next) => {
   // app settings
   const taxPrice = 0;
@@ -182,6 +200,9 @@ const createCardOrder = async (session) => {
   }
 };
 
+// @desc    This webhook will run when stripe payment success paid
+// @route   POST /webhook-checkout
+// @access  Protected/User
 exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   const sig = req.headers['stripe-signature'];
 

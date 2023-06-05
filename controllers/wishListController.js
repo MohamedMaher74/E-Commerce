@@ -3,6 +3,9 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
 // const AppError = require('../utils/appError');
 
+// @desc    Add product to wishlist
+// @route   POST /api/v1/wishlist
+// @access  Protected/User
 exports.addProductToWishlist = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(
     req.user._id,
@@ -24,6 +27,9 @@ exports.addProductToWishlist = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Remove product from wishlist
+// @route   DELETE /api/v1/wishlist/:productId
+// @access  Protected/User
 exports.removeProductFromWishlist = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(
     req.user._id,
@@ -45,6 +51,9 @@ exports.removeProductFromWishlist = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get logged user wishlist
+// @route   GET /api/v1/wishlist
+// @access  Protected/User
 exports.getLoggedUserWishlist = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user._id);
 

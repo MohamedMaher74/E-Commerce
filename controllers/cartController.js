@@ -15,6 +15,9 @@ const calcTotalCartPrice = (cart) => {
   return totalPrice;
 };
 
+// @desc    Add product to  cart
+// @route   POST /api/v1/cart
+// @access  Private/User
 exports.addProductToCart = asyncHandler(async (req, res, next) => {
   const { productId, color, quantity } = req.body;
   const product = await Product.findById(productId);
@@ -67,6 +70,9 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get logged user cart
+// @route   GET /api/v1/cart
+// @access  Private/User
 exports.getLoggedUserCart = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
@@ -85,6 +91,9 @@ exports.getLoggedUserCart = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Remove specific cart item
+// @route   DELETE /api/v1/cart/:itemId
+// @access  Private/User
 exports.removeSpecificCartItem = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findOneAndUpdate(
     { user: req.user._id },
@@ -108,6 +117,9 @@ exports.removeSpecificCartItem = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    clear logged user cart
+// @route   DELETE /api/v1/cart
+// @access  Private/User
 exports.clearCart = asyncHandler(async (req, res, next) => {
   await Cart.findOneAndDelete({ user: req.user._id });
 
@@ -117,6 +129,9 @@ exports.clearCart = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Update specific cart item quantity
+// @route   PUT /api/v1/cart/:itemId
+// @access  Private/User
 exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
   const { quantity } = req.body;
 
@@ -150,6 +165,9 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Apply coupon on logged user cart
+// @route   PUT /api/v1/cart/applyCoupon
+// @access  Private/User
 exports.applyCoupon = asyncHandler(async (req, res, next) => {
   // 1) Get coupon based on coupon name
   const coupon = await Coupon.findOne({
